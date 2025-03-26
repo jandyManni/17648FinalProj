@@ -20,13 +20,14 @@ typedef struct {
     int id1;      // First ID
     int id2;      // Second ID
 } Command;
-
+//used to parse keyboard input into commands, see documentation on git
 Command parseInput(const char *input) {
     Command cmd = {CMD_INVALID, -1, -1}; //Default to bad command
-    char action[10];
+    char action[10];//to hold command
     int id1, id2;
-//parse input 
-    if (sscanf(input, "%9s", action) == 1) {
+//parse user input 
+    if (sscanf(input, "%9s", action) == 1) {//grab action characters
+        //determine if pull all or pull one
         if (strcmp(action, "pull") == 0) {
             if (sscanf(input, "pull %d", &id1) == 1) {
                 cmd.command = CMD_PULL_ID;
@@ -35,12 +36,14 @@ Command parseInput(const char *input) {
                 cmd.command = CMD_PULL;
             }
         } 
+        //parse for add id
         else if (strcmp(action, "add") == 0) {
             if (sscanf(input, "add %d", &id1) == 1) {
                 cmd.command = CMD_ADD;
                 cmd.id1 = id1;
             }
         } 
+        //parse for two ids to replace
         else if (strcmp(action, "replace") == 0) {
             if (sscanf(input, "replace %d, %d", &id1, &id2) == 2) {
                 cmd.command = CMD_REPLACE;
@@ -54,7 +57,7 @@ Command parseInput(const char *input) {
     }
     return cmd;
 }
-
+//method to format recieved vic data
 void printVehicle(struct VDataID vic) {
     printf("\nID: %d", vic.Id);
     printf("\nOil Temp: %d°F", vic.OilTemp);
@@ -65,7 +68,7 @@ void printVehicle(struct VDataID vic) {
     printf("\nFuel Consumption Rate: %d Liters/hour", vic.FuelConsumptionRate);
     printf("\nError Codes: 0x%X\n", vic.ErrorCodes);
 }
-
+//iterate through array of vics
 void parseVehicles(struct VDataID table[]) {
     for (int i = 0; i < 64; i++) {
         if (table[i].Id == 0) {
@@ -87,7 +90,7 @@ int main() {
     }
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
-    // Convert IPv4 address
+    // need to convert adress to binary?
     if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0) {
         perror("Invalid address / Address not supported");
         exit(EXIT_FAILURE);
@@ -106,7 +109,7 @@ int main() {
         pfd[0].events = POLLIN;
         pfd[1].fd = STDIN_FILENO;
         pfd[1].events = POLLIN;
-        const int timeout_ms = 1000; //spend a second awaiting both polls adjust
+        const int timeout_ms = 1000; //spend a second awaiting both polls
         int poll_res = poll(pfd, 2, 1000);
             if (poll_res < 0) {
                 perror("poll");
@@ -143,47 +146,47 @@ int main() {
             send(sock, &cmd, sizeof(cmd), 0);
         // react based on expected response
         switch (cmd.command) {
-        case CMD_PULL:
+        case CMD_PULL://pull all
             printf("\nCommand: PULL ALL\n");
-            struct VDataID vehicles[64];
+            struct VDataID vehicles[64];//to hold expected vic array
             ssize_t bytes_received = recv(sock, vehicles, sizeof(vehicles), 0);
-            if (bytes_received > 0) {
-                parseVehicles(vehicles);
+            if (bytes_received > 0) {//important for error catching
+                parseVehicles(vehicles);//print recived data
             } else {
-                printf("Failed to receive vehicle data.\n");
+                printf("Failed to receive vehicle data.\n");//error statement
             }
             break;
-        case CMD_ADD:
-            char response[64];
+        case CMD_ADD://add one
+            char response[64];//expecting str response
             printf("\nCommand: ADD, ID: %d\n", cmd.id1);
             bytes_received = recv(sock, response, sizeof(response), 0);
             if (bytes_received > 0) {
                 printf("%s\n", response);
             } else {
-                printf("Failed to add vehicle data.\n");
+                printf("Failed to add vehicle data.\n");//error statement
             }
             break;
-        case CMD_PULL_ID:
+        case CMD_PULL_ID://pull one
             printf("\nCommand: PULL, ID: %d\n", cmd.id1);
-            struct VDataID result = {0};
+            struct VDataID result = {0};//expecting one vic, initialize to empty
             bytes_received = recv(sock, &result, sizeof(result), 0);
             if (bytes_received > 0) {
-                if(result.Id == 0)
+                if(result.Id == 0)// if not retrieved, id will be 0
                     printf("No Record Found\n");
                 else 
-                    printVehicle(result);
+                    printVehicle(result);//just need to format one vic to print
             } else {
-                printf("Failed to receive vehicle data.\n");
+                printf("Failed to receive vehicle data.\n");//error statement
             }
             break;
-        case CMD_REPLACE:
+        case CMD_REPLACE://replave vic in array
             printf("\nCommand: REPLACE, Old ID: %d, New ID: %d\n", cmd.id1, cmd.id2);
-            response[64];
+            response[64];//expected response holder
             bytes_received = recv(sock, response, sizeof(response), 0);
             if (bytes_received > 0) {
-                printf("%s\n", response);
+                printf("%s\n", response);//print response
             } else {
-                printf("Failed to replace vehicle data.\n");
+                printf("Failed to replace vehicle data.\n");//error statement
             }
             break;
         case CMD_EXIT:

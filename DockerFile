@@ -1,17 +1,12 @@
 # Use a base Ubuntu image
 FROM ubuntu:latest
-
 # Set the working directory inside the container
 WORKDIR /app
-
 # Copy the source code into the container
 COPY . /app
-
 # Ensure we have basic build tools
 RUN apt-get update && apt-get install -y make
-
 # Mount the host machine's gcc
 VOLUME ["/usr/bin/gcc"]
-
 # Default command
 CMD ["bash"]

@@ -18,8 +18,8 @@
 
 typedef struct {
     int command;  // Command type
-    int id1;      // First ID (if applicable)
-    int id2;      // Second ID (if applicable)
+    int id1;      // First ID
+    int id2;      // Second ID
 } Command;
 
 
@@ -130,20 +130,20 @@ void handleClient(int client_socket) {
         // Command handling logic
         printf("\nReceived command: ");
         switch (cmd.command) {
-                case CMD_PULL:
+                case CMD_PULL: //pull all
                     printf("PULL ALL\n");
                     struct VDataID vehicles[64];
                     pullAll(vehicles);
                     send(client_socket, vehicles, sizeof(vehicles), 0);
                     break;
-                case CMD_ADD:
+                case CMD_ADD://add to server data
                     char response[64];
                     printf("ADD Vehicle ID: %d\n", cmd.id1);
                     addVic(cmd.id1, response);
                     printf("Sending: %s\n", response);
                     send(client_socket, response, sizeof(response), 0);  
                     break;
-                case CMD_PULL_ID:
+                case CMD_PULL_ID://pull one vic
                     printf("PULL Vehicle ID: %d\n", cmd.id1);
                     struct VDataID getV = {0};
                     pullID(&getV,cmd.id1);
@@ -151,14 +151,14 @@ void handleClient(int client_socket) {
                     getV.Id, getV.OilTemp, getV.MAFSensor, getV.BatteryVoltage, getV.TirePressure, getV.FuelLevel);
                     send(client_socket, &getV, sizeof(getV), 0);         
                     break;
-                case CMD_REPLACE:
+                case CMD_REPLACE://replace existing id
                     printf("REPLACE Vehicle ID %d with %d\n", cmd.id1, cmd.id2);
                     response[64];
                     replaceVic(cmd.id1, cmd.id2, response);
                     printf("Sending: %s\n", response);
                     send(client_socket, response, sizeof(response), 0); 
                     break;
-                case CMD_EXIT:
+                case CMD_EXIT://client left
                     printf("EXIT command received. Closing connection.\n");
                     close(client_socket);
                     return;
@@ -166,7 +166,7 @@ void handleClient(int client_socket) {
                     printf("INVALID command received.\n");
                     break;
             }
-        }else if (poll_res == 0) {
+        }else if (poll_res == 0) { //no client request, check if its time to push
             time_t now = time(NULL);
             if (difftime(now, last_check) >= 60) { 
                 printf("\nPushing current Vic data to gateway.\n");
