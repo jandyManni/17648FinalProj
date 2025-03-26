@@ -13,7 +13,7 @@ void getVehicleData(struct VData *data) {
     data->TirePressure = 20 + rand() % 31;
     data->FuelLevel = rand() % 11; 
     data->FuelConsumptionRate = 1 + rand() % 5; 
-    data->ErrorCodes = (0xA1 << 24) | (0x31 << 16) | (0x55 << 8) | 0x23;
+    data->ErrorCodes = (0xA1 << 24) | (0xC1 << 16) | (0x55 << 8) | 0x23;
 }
 
 
