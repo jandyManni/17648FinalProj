@@ -110,4 +110,4 @@ Initial code setup and inspiration for tcp developed after reading the following
 - https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/
 - https://www.geeksforgeeks.org/socket-programming-cc/
 
-ChatGPT was used to assist construction of dockerfile and .sh to utilize local gcc in the setup of container and test client.
+ChatGPT was used to assist debugging, and to assist construction of dockerfile and .sh to utilize local gcc in the setup of container and test client.
