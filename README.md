@@ -42,6 +42,8 @@ To run the script, open a terminal in the project root directory and execute:
 
 ```bash
 ./run_container.sh          # Run the script
+```
+
 
 ### Running the Client and Server
 - The server runs within the container and randomly generates vehicle data to track and provide as needed. It also pushes all data to client at 1 minutes intervals.
