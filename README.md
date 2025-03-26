@@ -109,11 +109,14 @@ Simulates computer connected to vehicle API, does the following:
 Initial code setup and inspiration for tcp developed after reading the following articles:
 - https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/
 - https://www.geeksforgeeks.org/socket-programming-cc/
+
 Poll port method found here:
 - https://stackoverflow.com/questions/38915566/polling-tcp-connections-in-c
+
 Reading on structures in c, used for communication between files:
 - https://www.geeksforgeeks.org/structures-c/
 - https://www.geeksforgeeks.org/how-to-pack-a-struct-in-c/
+
 Source on time measurement functions:
 - https://www.geeksforgeeks.org/time-h-header-file-in-c-with-examples/
 
