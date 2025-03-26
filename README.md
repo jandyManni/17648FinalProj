@@ -41,5 +41,8 @@ A shell script `api_test.sh` is provided to automate the following steps:
 To run the script, open a terminal in the project root directory and execute:
 
 ```bash
-chmod +x run_container.sh   # Make the script executable
 ./run_container.sh          # Run the script
+
+### Running the Client and Server
+- The server runs within the container and randomly generates vehicle data to track and provide as needed. It also pushes all data to client at 1 minutes intervals.
+-The client runs locally and connects to the containerized server. The client will open with possible commands
