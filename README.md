@@ -63,7 +63,7 @@ newgrp docker
 ```
 
 ### "Bind failed: Address already in use":
-- top any existing container using the same name with
+- Stop any existing container using the same name with:
 
 ```bash
 docker rm -f server-instance
