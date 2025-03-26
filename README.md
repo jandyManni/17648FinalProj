@@ -120,4 +120,8 @@ Reading on structures in c, used for communication between files:
 Source on time measurement functions:
 - https://www.geeksforgeeks.org/time-h-header-file-in-c-with-examples/
 
+User input argument parsing:
+- https://www.geeksforgeeks.org/how-to-read-data-using-sscanf-in-c/
+- https://stackoverflow.com/questions/13832321/compare-part-of-an-input-string-using-strcmp-in-c
+
 ChatGPT was used to assist construction of dockerfile and .sh to utilize local gcc in the setup of container and test client. Also utilized GPT to better explain code found in sources above.
