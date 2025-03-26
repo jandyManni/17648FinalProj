@@ -1,6 +1,6 @@
 # 17648FinalProj
 
-This repository contains the code for a vehicle data server and client project. The server is containerized using Docker and runs on Ubuntu, while the client is compiled and executed locally using your system's GCC. The server and client communicate over TCP on port 8080.
+This repository contains the code for a vehicle data api and test client project. The api is containerized using Docker and runs on Ubuntu, while the client is compiled and executed locally using your system's GCC. The server and client communicate over TCP on port 8080.
 
 ---
 
@@ -54,9 +54,7 @@ To run the script, open a terminal in the project root directory and execute:
 
 ### "Docker Not Found/ Permission Denied": 
 - Ensure Docker Desktop is installed and running.
-
 - Enable WSL 2 integration in Docker Desktop settings.
-
 - If you see permission errors, add your WSL user to the docker group:
 
 ```bash
@@ -124,4 +122,4 @@ User input argument parsing:
 - https://www.geeksforgeeks.org/how-to-read-data-using-sscanf-in-c/
 - https://stackoverflow.com/questions/13832321/compare-part-of-an-input-string-using-strcmp-in-c
 
-ChatGPT was used to assist construction of dockerfile and .sh to utilize local gcc in the setup of container and test client. Also utilized GPT to better explain code found in sources above.
+ChatGPT was used to assist construction of dockerfile and .sh to utilize local gcc in the setup of container and test client. Also utilized GPT to better explain code found in sources above, where research could not offer better clarification.
