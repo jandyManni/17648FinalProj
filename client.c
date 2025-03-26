@@ -178,6 +178,13 @@ int main() {
             break;
         case CMD_REPLACE:
             printf("\nCommand: REPLACE, Old ID: %d, New ID: %d\n", cmd.id1, cmd.id2);
+            response[64];
+            bytes_received = recv(sock, response, sizeof(response), 0);
+            if (bytes_received > 0) {
+                printf("%s\n", response);
+            } else {
+                printf("Failed to replace vehicle data.\n");
+            }
             break;
         case CMD_EXIT:
             printf("Command: EXIT");

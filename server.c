@@ -31,7 +31,10 @@ int nextVic = 0;
 
 //Method to add vehicle to data array
 void addVic(int id, char response[]){
-    if(nextVic < 64){
+    if (id<=0 || id > 65535) {
+        snprintf(response, 64, "Incorrect ID value. Must be nonzero 16-bit int less than 65536");
+    }
+    else if(nextVic < 64){
     struct VData newV = {0};
     vehicle_ids[nextVic] = id;
     getVehicleData(&newV);
@@ -43,6 +46,26 @@ void addVic(int id, char response[]){
     }
     else{
         snprintf(response, 64, "Error: Vehicle slot is full.");
+    }
+}
+//Method to replace vehicle to data array
+void replaceVic(int id, int new_id, char response[]){
+    if (new_id<=0 || new_id > 65535) {
+        snprintf(response, 64, "Incorrect ID value. Must be nonzero 16-bit int less than 65536");
+    }
+    else {
+        struct VData newV = {0};
+        getVehicleData(&newV);
+        for(int i = 0; i < 64; i++){
+            int check_id = vehicle_ids[i];
+            if(check_id==id){
+                vehicleData[i] = newV;
+                vehicle_ids[i] = new_id;
+                snprintf(response, 64, "Vic %d added to slot %d\n", new_id, i);
+                return;
+            }
+        }
+        snprintf(response, 64, "No vehicle matching given id found.");
     }
 }
 //method to pull all Vic data
@@ -130,6 +153,10 @@ void handleClient(int client_socket) {
                     break;
                 case CMD_REPLACE:
                     printf("REPLACE Vehicle ID %d with %d\n", cmd.id1, cmd.id2);
+                    response[64];
+                    replaceVic(cmd.id1, cmd.id2, response);
+                    printf("Sending: %s\n", response);
+                    send(client_socket, response, sizeof(response), 0); 
                     break;
                 case CMD_EXIT:
                     printf("EXIT command received. Closing connection.\n");
