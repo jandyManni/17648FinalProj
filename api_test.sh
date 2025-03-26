@@ -19,7 +19,7 @@ fi
 echo "Building Docker container..."
 docker buildx build --load -t server-container -f DockerFile .
 
-# Remove existing container if it exists
+# Remove existing container for multiple runs
 if docker ps -a --format '{{.Names}}' | grep -q "^server-instance\$"; then
     echo "Removing existing container 'server-instance'..."
     docker rm -f server-instance
@@ -28,7 +28,7 @@ fi
 echo "Running Docker container with mounted server binary..."
 docker run -d --name server-instance -v "$(pwd)/$SERVER_BINARY:/app/server" -p 8080:8080 server-container /app/server
 
-# Wait a moment for the server to start
+# wait for the server to start
 sleep 2
 
 echo "Checking running container..."
@@ -44,6 +44,6 @@ fi
 echo "Running the client..."
 ./client
 
-# Optional: Stop and remove the container after testing
+#shut down server
 docker stop server-instance
 docker rm server-instance

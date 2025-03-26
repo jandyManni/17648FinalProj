@@ -7,10 +7,10 @@ WORKDIR /app
 # Copy the source code into the container
 COPY . /app
 
-# Ensure we have basic build tools (including make, but not gcc)
+# Ensure we have basic build tools
 RUN apt-get update && apt-get install -y make
 
-# Mount the host machine's gcc (to avoid containerizing it)
+# Mount the host machine's gcc
 VOLUME ["/usr/bin/gcc"]
 
 # Default command
