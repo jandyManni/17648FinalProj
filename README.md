@@ -17,6 +17,7 @@ This repository contains the code for a vehicle data server and client project. 
   - [VData.c and VData.h](#vdatac-and-vdatah)
   - [server.c](#serverc)
   - [client.c](#clientc)
+- [Documenation](#documentation)
 ---
 
 ## Requirements
@@ -47,4 +48,65 @@ To run the script, open a terminal in the project root directory and execute:
 
 ### Running the Client and Server
 - The server runs within the container and randomly generates vehicle data to track and provide as needed. It also pushes all data to client at 1 minutes intervals.
--The client runs locally and connects to the containerized server. The client will open with possible commands
+- The client runs locally and connects to the containerized server. The client will open with possible commands listed to the user. The client allows the user to add new vehicle's by id, pull all vehicle data, pull by id, and replace by id.
+
+## Troubleshooting
+
+### "Docker Not Found/ Permission Denied": 
+- Ensure Docker Desktop is installed and running.
+
+- Enable WSL 2 integration in Docker Desktop settings.
+
+- If you see permission errors, add your WSL user to the docker group:
+
+```bash
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+### "Bind failed: Address already in use":
+- top any existing container using the same name with
+
+```bash
+docker rm -f server-instance
+```
+
+### "GCC Not Found:"
+```bash
+gcc --version
+```
+
+## File Descriptions
+
+### DockerFile
+Defines the docker image using ubuntu as the base image. Expects user to provide gcc at runtime.
+
+### api_test.sh
+Script to automate the following:
+- Compile server code from local GCC
+- Build Docker image
+- Run the Docker container
+- Compile and run client code locally
+- Cleaning up container after client exit
+
+### VData.c and VData.h
+Simulates vehicle data retrieval with a ramdomly filled packed struct. Future implementations may allow for adjust_vehicle_data() method to simulate fluctuations in vehicle data that is already pulled.
+
+### server.c
+Vehicle API that manages up to 64 vehicles, does the following:
+- Maintains array of 64 vehicle data structs and array of 64 vehicle ids (16bit int)
+- Listens on port 8080 for client connection
+- Once connected, polls port for client requests before pushing all maintained vehicle data at regular intervals
+- Handles client pull, pull id, replace vehicle, add id requests
+
+### client.c
+Simulates computer connected to vehicle API, does the following:
+- Polls port for push data and user input every second
+- If push data, retrieves and prints formatted
+- If client input, sends and awaits api response
+
+## Documentation
+Initial code setup and inspiration for tcp developed after reading the following articles:
+- https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/
+- https://www.geeksforgeeks.org/socket-programming-cc/
+ChatGPT was used to assist construction of dockerfile and .sh to utilize local gcc in the setup of container and test client.
