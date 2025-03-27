@@ -25,7 +25,6 @@ This repository contains the code for a vehicle data api and test client project
 - **Docker Desktop** installed on your machine with **WSL 2 integration enabled** (if using Ubuntu under WSL).
 - **GCC** installed on your local machine.
 - A Linux/Ubuntu terminal (or WSL 2) for running the shell script.
-- Basic familiarity with Git and Docker.
 
 ---
 
